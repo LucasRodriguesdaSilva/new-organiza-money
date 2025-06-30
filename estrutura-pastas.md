@@ -81,7 +81,6 @@ my-nextjs-app/
 │   │
 │   ├── lib/                       # Utilitários e configurações
 │   │   ├── utils.ts               # Utilitários gerais (cn, etc.)
-│   │   ├── validations.ts         # Schemas de validação (Zod)
 │   │   ├── auth.ts                # Configuração de autenticação
 │   │   ├── db.ts                  # Configuração do banco de dados
 │   │   ├── api.ts                 # Cliente API
@@ -110,8 +109,13 @@ my-nextjs-app/
 │   │   └── global.d.ts
 │   │
 │   └── styles/                    # Estilos adicionais
-│       ├── components.css         # Estilos de componentes
-│       └── utilities.css          # Classes utilitárias customizadas
+│   |   ├── components.css         # Estilos de componentes
+│   |    └── utilities.css          # Classes utilitárias customizadas
+|   |__ modules/
+|   |     |-- auth/ui/view        # views das páginas, onde fica todo o layout da página feito como um 'use client' 
+|   |     |-- home/ui/view        # views das páginas, onde fica todo o layout da página feito como um 'use client'
+|   |     |-- ...                 # views das páginas, onde fica todo o layout da página feito como um 'use client'
+
 │
 ├── docs/                          # Documentação
 │   ├── api.md
@@ -194,3 +198,269 @@ npx shadcn-ui@latest add button input card dialog form
 - **Hooks Customizados**: Lógica reutilizável em hooks
 - **Separação de Responsabilidades**: Cada pasta tem uma função específica
 - **Escalabilidade**: Estrutura preparada para crescimento do projeto
+
+
+---- Novas adições cursor
+
+# Módulo de Autenticação
+
+Este módulo implementa o sistema de autenticação usando Zustand para gerenciamento de estado e comunicação direta com a API Laravel.
+
+## 📁 Estrutura
+
+```
+src/
+├── store/
+│   └── auth-store.ts           # Gerenciamento de estado (Zustand)
+├── services/
+│   └── auth.service.ts         # Requisições para API Laravel
+├── types/
+│   └── auth.ts                 # Tipos TypeScript
+├── lib/
+│   ├── api.ts                  # Configuração do axios
+│   └── validations.ts          # Schemas de validação (Zod)
+└── modules/auth/
+    └── ui/view/
+        └── sign-up-view.tsx    # Componente de registro
+    └── ui/validations/
+        └── registerSchema.tsx    # Validação Registro
+        └── loginSchema.tsx    # Validação Login
+```
+
+## 🚀 Funcionalidades Implementadas
+
+### ✅ Cadastro de Usuários
+- Formulário de registro com validação Zod
+- Integração com Zustand store
+- Comunicação direta com API Laravel
+- Tratamento de erros
+- Redirecionamento após sucesso
+
+## 🔧 Configuração Necessária
+
+### 1. Variáveis de Ambiente
+Crie um arquivo `.env.local` na raiz do projeto:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+```
+
+### 2. Backend Laravel
+Certifique-se de que o backend Laravel tenha as seguintes rotas:
+
+```php
+// routes/api.php
+Route::post('/auth/register', [AuthController::class, 'register']);
+```
+
+## 🔄 Fluxo de Dados (Corrigido)
+
+1. **Usuário preenche formulário** → SignUpView
+2. **Validação client-side** → Zod schema
+3. **Service faz requisição** → AuthService → Laravel
+4. **Atualização do estado** → Zustand store
+5. **Redirecionamento** → Dashboard
+
+## 📝 Como Usar
+
+### Acessar a página de registro:
+```
+http://localhost:3000/sign-up
+```
+
+### Componente SignUpView:
+```typescript
+import SignUpView from "@/modules/auth/ui/view/sign-up-view";
+
+// Usar em uma página
+const Page = () => {
+  return <SignUpView />;
+};
+```
+
+## 🎯 Separação de Responsabilidades
+
+### **Store (Zustand)**
+- ✅ Gerencia estado da aplicação
+- ✅ Persistência no localStorage
+- ❌ NÃO faz requisições
+
+### **Service**
+- ✅ Faz requisições para API Laravel
+- ✅ Trata erros de rede
+- ❌ NÃO gerencia estado
+
+### **Componente**
+- ✅ Renderiza UI
+- ✅ Usa store e service
+- ✅ Validação de formulário
+
+### **Validação**
+- ✅ **Frontend (Zod)**: UX imediata
+- ✅ **Backend (Laravel)**: Segurança
+
+## 🎯 Próximos Passos
+
+- [ ] Implementar login
+- [ ] Implementar logout
+- [ ] Proteção de rotas
+- [ ] Refresh token
+- [ ] Recuperação de senha
+- [ ] Verificação de email
+
+## 🛠️ Dependências
+
+- `zustand` - Gerenciamento de estado
+- `axios` - Cliente HTTP
+- `zod` - Validação de schemas
+- `react-hook-form` - Gerenciamento de formulários
+- `@hookform/resolvers` - Integração Zod + React Hook Form 
+
+
+--- att cursor
+
+# Módulo de Autenticação
+
+Este módulo implementa o sistema de autenticação usando Zustand para gerenciamento de estado, hooks customizados para lógica de negócio e comunicação direta com a API Laravel.
+
+## 📁 Estrutura
+
+```
+src/
+├── store/
+│   └── auth-store.ts                    # Gerenciamento de estado (Zustand)
+├── services/
+│   └── auth.service.ts                  # Requisições para API Laravel
+├── types/
+│   └── auth.ts                          # Tipos TypeScript
+├── lib/
+│   └── api.ts                           # Configuração do axios
+└── modules/auth/
+    ├── hooks/
+    │   ├── use-auth.ts                  # Hook principal de autenticação
+    │   ├── use-register.ts              # Hook específico para registro
+    │   ├── use-login.ts                 # Hook específico para login
+    │   ├── use-form-validation.ts       # Hook genérico para validação
+    │   └── index.ts                     # Exportações centralizadas
+    ├── ui/
+    │   ├── validation/
+    │   │   └── registerSchema.ts        # Schema de validação Zod
+    │   └── view/
+    │       └── sign-up-view.tsx         # Componente de registro
+    └── README.md                        # Esta documentação
+```
+
+## 🚀 Funcionalidades Implementadas
+
+### ✅ Cadastro de Usuários
+- Formulário de registro com validação Zod
+- Hooks customizados para melhor organização
+- Integração com Zustand store
+- Comunicação direta com API Laravel
+- Tratamento de erros
+- Redirecionamento após sucesso
+
+## 🎯 Hooks Customizados
+
+### **useAuth** - Hook Principal
+```typescript
+const { user, isAuthenticated, register, logout } = useAuth();
+```
+
+### **useRegister** - Hook Específico
+```typescript
+const { register, handleSubmit, errors, isLoading } = useRegister();
+```
+
+### **useFormValidation** - Hook Genérico
+```typescript
+const { form, validationErrors, setGeneralError } = useFormValidation(schema);
+```
+
+## 📝 Como Usar
+
+### Componente Simplificado:
+```typescript
+import { useRegister } from "@/modules/auth/hooks";
+
+const SignUpView = () => {
+  const { register, handleSubmit, errors, isLoading } = useRegister();
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input {...register("name")} />
+      {errors.name && <span>{errors.name.message}</span>}
+      <button disabled={isLoading}>Cadastrar</button>
+    </form>
+  );
+};
+```
+
+### Criando Novos Hooks:
+```typescript
+import { useFormValidation } from "@/modules/auth/hooks";
+
+export const useCustomForm = () => {
+  const { form, validationErrors, setGeneralError } = useFormValidation(customSchema);
+  const { register, handleSubmit, errors } = form;
+  
+  // Sua lógica aqui...
+  
+  return { register, handleSubmit, errors, validationErrors };
+};
+```
+
+## 🔧 Configuração Necessária
+
+### 1. Variáveis de Ambiente
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+```
+
+### 2. Backend Laravel
+```php
+Route::post('/auth/register', [AuthController::class, 'register']);
+```
+
+## 🔄 Fluxo de Dados
+
+1. **Usuário preenche formulário** → SignUpView
+2. **Hook useRegister** → Validação + Requisição
+3. **Service AuthService** → Comunicação com Laravel
+4. **Store Zustand** → Atualização de estado
+5. **Hook useRegister** → Redirecionamento
+
+## 🎯 Benefícios dos Hooks
+
+### **Legibilidade**
+- Componentes mais limpos e focados na UI
+- Lógica de negócio encapsulada nos hooks
+
+### **Reutilização**
+- Hooks podem ser usados em múltiplos componentes
+- Lógica compartilhada entre diferentes formulários
+
+### **Testabilidade**
+- Hooks podem ser testados isoladamente
+- Separação clara entre UI e lógica
+
+### **Manutenibilidade**
+- Mudanças na lógica não afetam a UI
+- Estrutura modular e organizada
+
+## 🎯 Próximos Passos
+
+- [ ] Implementar login com useLogin hook
+- [ ] Implementar logout
+- [ ] Proteção de rotas
+- [ ] Refresh token
+- [ ] Recuperação de senha
+- [ ] Verificação de email
+
+## 🛠️ Dependências
+
+- `zustand` - Gerenciamento de estado
+- `axios` - Cliente HTTP
+- `zod` - Validação de schemas
+- `react-hook-form` - Gerenciamento de formulários
+- `@hookform/resolvers` - Integração Zod + React Hook Form
