@@ -26,6 +26,14 @@ export interface LoginRequest {
   password: string;
 }
 
+
+export type SignInFormData = {
+  email: string;
+  password: string;
+};
+
+
+
 export interface AuthResponse {
   user: User;
   token: string;

@@ -61,6 +61,9 @@ lint:
 test:
 	docker compose exec nextjs npm run test
 
+permissions:
+	docker compose exec nextjs chown -R www-data:www-data .
+
 # Setup inicial
 setup:
 	make build
