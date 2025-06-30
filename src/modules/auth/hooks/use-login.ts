@@ -1,21 +1,11 @@
-import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import { useFormValidation } from "@/hooks/use-form-validation";
-
-// Schema de validação para login
-const loginSchema = z.object({
-  email: z.string().email("E-mail inválido"),
-  password: z.string().min(1, "Senha é obrigatória"),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import { loginSchema, LoginFormData } from "@/modules/auth/ui/validation/loginSchema";
 
 export const useLogin = () => {
-  const { setUser, setToken, setLoading, setError, isLoading } = useAuthStore();
-  const router = useRouter();
+  const { setLoading, setError, isLoading } = useAuthStore();
   
-  const { form, validationErrors, setGeneralError, clearErrors } = useFormValidation(loginSchema);
+  const { form, clearErrors } = useFormValidation(loginSchema);
   const { register, handleSubmit, formState: { errors }, reset } = form;
 
   const onSubmit = async (data: LoginFormData) => {
@@ -36,12 +26,11 @@ export const useLogin = () => {
   return {
     // Formulário
     register,
-    handleSubmit: handleSubmit(onSubmit as any),
+    handleSubmit: handleSubmit(onSubmit),
     errors,
     
     // Estado
     isLoading,
-    validationErrors,
     
     // Ações
     reset,

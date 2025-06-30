@@ -45,7 +45,7 @@ export const useRegister = () => {
   return {
     // Formulário
     register,
-    handleSubmit: handleSubmit(onSubmit as any),
+    handleSubmit: handleSubmit(onSubmit),
     errors,
     
     // Estado

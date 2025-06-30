@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRegister } from "@/modules/auth/hooks";
+import Link from "next/link";
 
 const SignUpView = () => {
   const { register, handleSubmit, errors, isLoading, validationErrors } = useRegister();
@@ -18,7 +19,7 @@ const SignUpView = () => {
             <p className="text-muted-foreground mb-6">
               Preencha os dados abaixo para criar sua conta
             </p>
-            
+
             {validationErrors.general && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
                 {validationErrors.general}
@@ -81,8 +82,8 @@ const SignUpView = () => {
                 )}
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={isLoading}
                 className="w-full"
               >
@@ -93,13 +94,13 @@ const SignUpView = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Já tem uma conta?{" "}
-                <a href="/sign-in" className="text-primary hover:underline">
+                <Link href="/sign-in" className="text-primary hover:underline">
                   Faça login
-                </a>
+                </Link>
               </p>
             </div>
           </div>
-          
+
           <div className="bg-gray-50 p-6 flex items-center justify-center">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Bem-vindo ao Organiza Money</h3>
@@ -113,13 +114,13 @@ const SignUpView = () => {
 
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our{" "}
-        <a href="#" className="underline underline-offset-4">
+        <Link href="#" className="underline underline-offset-4">
           Terms of Service
-        </a>{" "}
+        </Link>{" "}
         and{" "}
-        <a href="#" className="underline underline-offset-4">
+        <Link href="#" className="underline underline-offset-4">
           Privacy Policy
-        </a>
+        </Link>
       </div>
     </div>
   );

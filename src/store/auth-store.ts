@@ -1,19 +1,7 @@
+import type { User, RegisterData } from '@/types/auth';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatar?: string;
-}
-
-export interface RegisterData {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-}
 
 export interface AuthState {
   user: User | null;
@@ -44,11 +32,10 @@ export const useAuthStore = create<AuthStore>()(
       error: null,
 
       // Ações
-      setUser: (user) => set({ user }),
+      setUser: (user) => set({ user, isAuthenticated: !!user }),
       
       setToken: (token) => {
         set({ token });
-        localStorage.setItem('auth_token', token);
       },
 
       setLoading: (isLoading) => set({ isLoading }),
@@ -63,7 +50,6 @@ export const useAuthStore = create<AuthStore>()(
           isLoading: false,
           error: null,
         });
-        localStorage.removeItem('auth_token');
       },
     }),
     {

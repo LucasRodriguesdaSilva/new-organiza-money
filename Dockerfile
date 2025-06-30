@@ -49,8 +49,8 @@ FROM node:18-alpine AS production
 RUN apk add --no-cache libc6-compat
 
 # Criar usuário não-root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs \
+    && adduser  --system --uid 1001 --gid 1001 nextjs
 
 # Definir diretório de trabalho
 WORKDIR /app

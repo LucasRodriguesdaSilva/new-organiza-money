@@ -11,7 +11,7 @@ export const useFormValidation = <T extends z.ZodTypeAny>(
 
   const form = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues as any,
+    defaultValues: defaultValues as z.infer<T>,
   });
 
   const setServerError = (field: string, message: string) => {
