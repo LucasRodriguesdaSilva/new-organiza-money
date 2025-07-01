@@ -81,12 +81,10 @@ export function AppSidebar() {
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                     <Link href={item.url} passHref>
-      <div className={getNavCls(item)}>
-        <item.icon className="h-4 w-4" />
-        {!collapsed && <span>{item.title}</span>}
-      </div>
-    </Link>
+                      <Link href={item.url} className={getNavCls(item)}>
+                     <item.icon className="h-4 w-4" />
+                     {!collapsed && <span>{item.title}</span>}
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -102,12 +100,10 @@ export function AppSidebar() {
               {configItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url} passHref>
-      <div className={getNavCls(item)}>
-        <item.icon className="h-4 w-4" />
-        {!collapsed && <span>{item.title}</span>}
-      </div>
-    </Link>
+                     <Link href={item.url} className={getNavCls(item)}>
+                     <item.icon className="h-4 w-4" />
+                     {!collapsed && <span>{item.title}</span>}
+                   </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
