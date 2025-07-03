@@ -12,8 +12,6 @@ RUN npm install
 RUN groupadd -o -g ${GID} nodejs || true && \
     useradd  -o -u ${UID} -g nodejs -m -s /bin/bash nodejs || true
 
-COPY . .
-
 COPY --chown=nodejs:nodejs . .
 
 USER nodejs

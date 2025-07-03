@@ -10,10 +10,13 @@ export class AuthService {
    */
   static async registrar(registerData: SignUpFormData): Promise<Partial<RegisterData>> {
     try {
-      const { data } = await apiClient.post<RegisterResponse>('/v1/auth/registrar', registerData);      
-      
-      const obj = { success: true, user: data.data!, token: data.access_token!, token_type: data.token_type! };
-      return obj
+      const { data } = await apiClient.post<RegisterResponse>('/v1/auth/registrar', registerData);
+
+      if (!data.data || !data.access_token || !data.token_type) {
+        return { success: false, message: 'Dados de resposta incompletos' };
+      }
+
+      return { success: true, user: data.data, token: data.access_token, token_type: data.token_type };
 
     } catch (error: unknown) {
 

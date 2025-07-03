@@ -5,7 +5,7 @@ export interface User {
   registered_at?: string;
 }
 
-export type SignInFormData = {
+export interface SignInFormData = {
   email: string;
   password: string;
 };
@@ -27,7 +27,7 @@ export interface RegisterResponse {
 
 export interface RegisterData {
   success: boolean;
-  user: User
+  user: User;
   token: string;
   token_type: string;
   message?: string;
