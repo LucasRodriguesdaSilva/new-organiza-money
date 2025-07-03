@@ -1,78 +1,21 @@
-FROM node:18-alpine AS base
+FROM node:18-slim
 
-# Instalar dependências necessárias
-RUN apk add --no-cache libc6-compat
+ARG UID=1000
+ARG GID=1000
 
-# Definir diretório de trabalho
 WORKDIR /app
 
-# Copiar arquivos de dependências
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install
 
-# Estágio de desenvolvimento
-FROM base AS development
+RUN groupadd -o -g ${GID} nodejs || true && \
+    useradd  -o -u ${UID} -g nodejs -m -s /bin/bash nodejs || true
 
-# Instalar todas as dependências (incluindo devDependencies)
-RUN npm ci
+COPY --chown=nodejs:nodejs . .
 
-# Copiar código fonte
-COPY . .
+USER nodejs
 
-# Expor porta
 EXPOSE 3000
 
-# Definir comando padrão para desenvolvimento
 CMD ["npm", "run", "dev"]
-
-# Estágio de build
-FROM base AS builder
-
-# Instalar todas as dependências
-RUN npm ci
-
-# Copiar código fonte
-COPY . .
-
-# Definir variável de ambiente para build
-ENV NEXT_TELEMETRY_DISABLED 1
-
-# Fazer build da aplicação
-RUN npm run build
-
-# Estágio de produção
-FROM node:18-alpine AS production
-
-# Instalar dependências do sistema
-RUN apk add --no-cache libc6-compat
-
-# Criar usuário não-root
-RUN addgroup --system --gid 1001 nodejs \
-    && adduser  --system --uid 1001 --gid 1001 nextjs
-
-# Definir diretório de trabalho
-WORKDIR /app
-
-# Copiar arquivos necessários do estágio builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-
-# Alterar propriedade dos arquivos
-RUN chown -R nextjs:nodejs /app
-
-# Usar usuário não-root
-USER nextjs
-
-# Expor porta
-EXPOSE 3000
-
-# Definir variáveis de ambiente
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV PORT 3000
-
-# Comando para iniciar a aplicação
-CMD ["node", "server.js"]
