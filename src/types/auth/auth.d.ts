@@ -5,7 +5,7 @@ export interface User {
   registered_at?: string;
 }
 
-export interface SignInFormData = {
+export interface SignInFormData {
   email: string;
   password: string;
 };
