@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangle, CheckCircle, DollarSign, PiggyBank, Target, TrendingDown, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AlertDescription } from "@/components/ui/alert";
+
 const DashboardView = () => {
  
     const currentMonth = "Julho 2025";
@@ -42,7 +42,7 @@ const DashboardView = () => {
     <div className="space-y-6">
         {/* Header */}
         <div className="space-y-2">
-            <h2 className="text-3x1 font-bold tracking-tight text-foreground">Dashboard Financeiro</h2>
+            <h2 className="text-3xL font-bold tracking-tight text-foreground">Dashboard Financeiro</h2>
             <p className="text-muted-foreground">
                 Visão geral das suas finanças em {currentMonth}
             </p>
@@ -50,13 +50,13 @@ const DashboardView = () => {
 
         {/* Summary Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="bg-grandient-to-br from-green-500/10 to-green-600/10 border-green-500/20">
+            <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
                     <DollarSign className="h-4 w-4 text-green-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2x1 font-bold text-green-500">
+                    <div className="text-2xL font-bold text-green-500">
                         R$ {monthlyData.income.toLocaleString('pt-BR')}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -68,10 +68,10 @@ const DashboardView = () => {
             <Card className="bg-gradient-to-br from-red-500/10 to-red-600/10 border-red-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Gastos Totais</CardTitle>
-                    < TrendingDown className="h-4 w-4 text-red-500"/>
+                    <TrendingDown className="h-4 w-4 text-red-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2x1 font-bold text-red-500">
+                    <div className="text-2xL font-bold text-red-500">
                         R$ {monthlyData.expenses.toLocaleString('pt-BR')}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -83,10 +83,10 @@ const DashboardView = () => {
             <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Saldo Mensal</CardTitle>
-                    < PiggyBank className="h-4 w-4 text-blue-500"/>
+                    <PiggyBank className="h-4 w-4 text-blue-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2x1 font-bold text-blue-500">
+                    <div className="text-2xL font-bold text-blue-500">
                         R$ {monthlyData.savings.toLocaleString('pt-BR')}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -101,7 +101,7 @@ const DashboardView = () => {
                     <TrendingUp className="h-4 w-4 text-purple-500"/>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2x1 font-bold text-purple-500">
+                    <div className="text-2xL font-bold text-purple-500">
                         {monthlyData.savingsRate}%
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -124,9 +124,9 @@ const DashboardView = () => {
                     {expensesByCategory.map((item, index) => (
                         <div key={index} className="space-y-2">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium">{item.category}</span>^
+                                <span className="text-sm font-medium">{item.category}</span>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm font-medium">R$ {item.category}</span>
+                                    <span className="text-sm font-medium">R$ {item.amount.toLocaleString('pt-BR')}</span>
                                     <Badge 
                                         variant={item.status === 'over' ? 'destructive' : item.status === 'under' ? 'secondary' : 'default'}
                                         className="text-xs"
