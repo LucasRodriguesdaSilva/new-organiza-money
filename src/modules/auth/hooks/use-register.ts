@@ -1,12 +1,14 @@
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
-import { AuthService } from "@/services/auth.service";
+import { AuthService } from "@/services/auth/auth.service";
 import { registerSchema, type RegisterFormData } from "../ui/validation/registerSchema";
 import { useFormValidation } from "@/hooks/use-form-validation";
+import { useState } from "react";
 
 export const useRegister = () => {
-  const { setUser, setToken, setLoading, setError, isLoading } = useAuthStore();
+  const { setUser, setToken } = useAuthStore();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   
   const { form, validationErrors, setGeneralError, clearErrors } = useFormValidation(registerSchema);
   const { register, handleSubmit, formState: { errors }, reset } = form;
@@ -14,14 +16,15 @@ export const useRegister = () => {
   const onSubmit = async (data: RegisterFormData) => {
     clearErrors();
     setLoading(true);
-    setError(null);
     
-    const result = await AuthService.register(data);
+    const result = await AuthService.registrar(data);
     
-    if (result.success && result.data) {
+    if (result.success && result.user) {
       // Registro bem-sucedido
-      setUser(result.data.user);
-      setToken(result.data.token);
+      setUser(result.user);
+      console.log(result);
+      
+      setToken(result.token as string);
       setLoading(false);
       
       // Limpar formulário
@@ -49,7 +52,7 @@ export const useRegister = () => {
     errors,
     
     // Estado
-    isLoading,
+    loading,
     validationErrors,
     
     // Ações

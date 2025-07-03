@@ -8,7 +8,7 @@ import { useRegister } from "@/modules/auth/hooks";
 import Link from "next/link";
 
 const SignUpView = () => {
-  const { register, handleSubmit, errors, isLoading, validationErrors } = useRegister();
+  const { register, handleSubmit, errors, loading, validationErrors } = useRegister();
 
   return (
     <div className="flex flex-col gap-6">
@@ -84,10 +84,10 @@ const SignUpView = () => {
 
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={loading}
                 className="w-full"
               >
-                {isLoading ? 'Criando conta...' : 'Criar conta'}
+                {loading ? 'Criando conta...' : 'Criar conta'}
               </Button>
             </form>
 

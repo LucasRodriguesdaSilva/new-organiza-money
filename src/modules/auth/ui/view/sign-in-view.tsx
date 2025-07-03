@@ -1,13 +1,11 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { useLogin } from "../../hooks";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Sign } from "crypto";
-import { SignInFormData } from "@/types/auth";
+import { SignInFormData } from "@/types/auth/auth";
 
 const SignInView = () => {
 

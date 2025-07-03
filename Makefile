@@ -23,7 +23,7 @@ build:
 
 # Modo desenvolvimento
 dev:
-	docker compose up -d nextjs
+	docker compose up -d nextjs_dev
 
 # Modo produção
 prod:
@@ -47,19 +47,19 @@ logs:
 
 # Acessar shell do container (desenvolvimento)
 shell:
-	docker compose exec nextjs sh
+	docker exec -it nextjs_dev sh
 
 # Instalar dependências
 install:
-	docker compose exec nextjs npm install
+	docker compose exec nextjs_dev npm install
 
 # Executar linting
 lint:
-	docker compose exec nextjs npm run lint
+	docker compose exec nextjs_dev npm run lint
 
 # Executar testes
 test:
-	docker compose exec nextjs npm run test
+	docker compose exec nextjs_dev npm run test
 
 permissions:
 	docker compose exec nextjs chown -R www-data:www-data .
