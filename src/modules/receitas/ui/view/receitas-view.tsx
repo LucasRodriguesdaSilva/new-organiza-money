@@ -33,7 +33,7 @@ export default function ReceitasView() {
     .reduce((sum, item) => sum + item.amount, 0);
 
     const nextMonthForecast = monthlyComparison.length > 0
-    ? monthlyComparison[monthlyComparison.length - 1]. total * 1.01 
+    ? monthlyComparison[monthlyComparison.length - 1].total * 1.01 
     : 0;
     
     const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
@@ -41,6 +41,26 @@ export default function ReceitasView() {
     ? incomeData.reduce((sum, item) => sum + item.growth, 0) / incomeData.length
     : 0;
     
+    const currentMonthTotal = monthlyComparison[monthlyComparison.length - 1]?.total || 0;
+    const previousMonthTotal = monthlyComparison[monthlyComparison.length - 2]?.total || 0;
+    const monthlyGrowthPercentage = previousMonthTotal > 0
+    ? ((currentMonthTotal - previousMonthTotal) / previousMonthTotal * 100).toFixed(1)
+    : 0;
+
+    const passiveIncomePercentage = totalIncome > 0
+    ? ((passiveIncome / totalIncome) * 100).toFixed(1)
+    : 0;
+
+    const generateForecast = (baseAmount: number, months: number) => {
+        return Array.from({ length: months }, (_, i) => ({
+            month: new Date(new Date().getFullYear(), new Date().getMonth() + i + 1, 1)
+                .toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }),
+                amount: Math.round(baseAmount * Math.pow(1.01, i + 1))
+        }));
+    };
+
+    const forecasts = generateForecast(nextMonthForecast, 3);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -64,7 +84,7 @@ export default function ReceitasView() {
           <CardContent>
             <div className="text-2xl font-bold text-green-600">R$ {totalIncome.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              +12% em relação ao mês anterior
+              {monthlyGrowthPercentage}% em relação ao mês anterior
             </p>
           </CardContent>
         </Card>
@@ -90,7 +110,7 @@ export default function ReceitasView() {
           <CardContent>
             <div className="text-2xl font-bold">R$ {passiveIncome.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              2.5% do total
+                {passiveIncomePercentage}% do total
             </p>
           </CardContent>
         </Card>
@@ -177,18 +197,12 @@ export default function ReceitasView() {
             <div className="space-y-4">
               <h3 className="font-semibold">Próximos 3 Meses</h3>
               <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Set/25:</span>
-                  <span className="font-semibold">R$ 6.077</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Out/25:</span>
-                  <span className="font-semibold">R$ 6.077</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Nov/25:</span>
-                  <span className="font-semibold">R$ 6.077</span>
-                </div>
+                {forecasts.map((forecast, index) => (
+                    <div key={index} className="flex justify-between">
+                        <span>{forecast.month}:</span>
+                        <span className="font-semibold">R$ {forecast.amount.toLocaleString()}</span>
+                    </div>
+                ))}
               </div>
             </div>
             <div className="space-y-4">
@@ -196,7 +210,7 @@ export default function ReceitasView() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Estabilidade:</span>
-                  <Badge variant="secondary">±12%</Badge>
+                  <Badge variant="secondary">±{Math.abs(averageGrowth).toFixed(1)}%</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Classificação:</span>
