@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Plus, TrendingUp, DollarSign, Calendar, Target } from "lucide-react";
+import { Item } from "@radix-ui/react-accordion";
 
 const incomeData = [
-  { source: "Salário", amount: 5000, month: "Jun/25", type: "Fixo", growth: 0 },
-  { source: "Freelance", amount: 800, month: "Jun/25", type: "Variável", growth: 15 },
-  { source: "Investimentos", amount: 150, month: "Jun/25", type: "Passivo", growth: 8 },
-  { source: "Outros", amount: 50, month: "Jun/25", type: "Eventual", growth: -20 },
+  { source: "Salário", amount: 5000, month: "Jun", type: "Fixo", growth: 0 },
+  { source: "Freelance", amount: 800, month: "Jun", type: "Variável", growth: 15 },
+  { source: "Investimentos", amount: 150, month: "Jun", type: "Passivo", growth: 8 },
+  { source: "Outros", amount: 50, month: "Jun", type: "Eventual", growth: -20 },
 ];
+
+
 
 const monthlyComparison = [
   { month: "Abr", total: 5500 },
@@ -20,10 +23,24 @@ const monthlyComparison = [
   { month: "Ago", total: 5870 },
 ];
 
-export default function ReceitasView() {
-  const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
-  const averageGrowth = incomeData.reduce((sum, item) => sum + item.growth, 0) / incomeData.length;
+const maxMonthlyValue = Math.max(...monthlyComparison.map(m => m.total));
 
+
+
+export default function ReceitasView() {
+
+    const passiveIncome = incomeData.filter(item => item.type === "Passivo")
+    .reduce((sum, item) => sum + item.amount, 0);
+
+    const nextMonthForecast = monthlyComparison.length > 0
+    ? monthlyComparison[monthlyComparison.length - 1]. total * 1.01 
+    : 0;
+    
+    const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
+    const averageGrowth = incomeData.length > 0
+    ? incomeData.reduce((sum, item) => sum + item.growth, 0) / incomeData.length
+    : 0;
+    
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -71,7 +88,7 @@ export default function ReceitasView() {
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R$ 150</div>
+            <div className="text-2xl font-bold">R$ {passiveIncome.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               2.5% do total
             </p>
@@ -84,7 +101,7 @@ export default function ReceitasView() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R$ 6.077</div>
+            <div className="text-2xl font-bold">R$ {nextMonthForecast.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               Baseado na média móvel
             </p>
@@ -139,7 +156,7 @@ export default function ReceitasView() {
                 <div className="flex items-center space-x-4">
                   <span className="font-medium w-12">{month.month}</span>
                   <Progress 
-                    value={(month.total / 7000) * 100} 
+                    value={(month.total / maxMonthlyValue) * 100} 
                     className="w-48" 
                   />
                 </div>
