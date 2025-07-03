@@ -56,7 +56,7 @@ const DashboardView = () => {
                     <DollarSign className="h-4 w-4 text-green-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xL font-bold text-green-500">
+                    <div className="text-2xl font-bold text-green-500">
                         R$ {monthlyData.income.toLocaleString('pt-BR')}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -71,7 +71,7 @@ const DashboardView = () => {
                     <TrendingDown className="h-4 w-4 text-red-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xL font-bold text-red-500">
+                    <div className="text-2xl font-bold text-red-500">
                         R$ {monthlyData.expenses.toLocaleString('pt-BR')}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -86,7 +86,7 @@ const DashboardView = () => {
                     <PiggyBank className="h-4 w-4 text-blue-500" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xL font-bold text-blue-500">
+                    <div className="text-2xl font-bold text-blue-500">
                         R$ {monthlyData.savings.toLocaleString('pt-BR')}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -101,7 +101,7 @@ const DashboardView = () => {
                     <TrendingUp className="h-4 w-4 text-purple-500"/>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xL font-bold text-purple-500">
+                    <div className="text-2xl font-bold text-purple-500">
                         {monthlyData.savingsRate}%
                     </div>
                     <p className="text-xs text-muted-foreground">
