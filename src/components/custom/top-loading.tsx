@@ -7,7 +7,7 @@ export function TopLoading() {
     <NextTopLoader
       color="black"
       height={4}
-      showSpinner={false}
+      showSpinner={true}
       shadow={`0 0 10px black, 0 0 5px black`}
     />
   );
