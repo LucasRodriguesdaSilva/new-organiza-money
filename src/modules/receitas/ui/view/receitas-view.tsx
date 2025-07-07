@@ -7,10 +7,10 @@ import { Plus, TrendingUp, DollarSign, Calendar, Target } from "lucide-react";
 import { Item } from "@radix-ui/react-accordion";
 
 const incomeData = [
-  { source: "Salário", amount: 5000, month: "Jun", type: "Fixo", growth: 0 },
-  { source: "Freelance", amount: 800, month: "Jun", type: "Variável", growth: 15 },
-  { source: "Investimentos", amount: 150, month: "Jun", type: "Passivo", growth: 8 },
-  { source: "Outros", amount: 50, month: "Jun", type: "Eventual", growth: -20 },
+   { source: "Salário", amount: 5000, month: "Jun", type: "Fixo", growth: 0 },
+   { source: "Freelance", amount: 800, month: "Jun", type: "Variável", growth: 15 },
+   { source: "Investimentos", amount: 150, month: "Jun", type: "Passivo", growth: 8 },
+   { source: "Outros", amount: 50, month: "Jun", type: "Eventual", growth: -20 },
 ];
 
 
@@ -62,7 +62,7 @@ export default function ReceitasView() {
     const forecasts = generateForecast(nextMonthForecast, 3);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-8">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Receitas</h1>
