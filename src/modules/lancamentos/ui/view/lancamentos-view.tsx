@@ -101,27 +101,37 @@ const lancamentosView = () => {
   const handleAddTransaction = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    
-    const newTransaction: Transaction = {
-      id: Date.now().toString(),
-      date: formData.get("date") as string,
-      type: formData.get("type") as "income" | "expense",
-      category: formData.get("category") as string,
-      subcategory: formData.get("subcategory") as string,
-      description: formData.get("description") as string,
-      amount: parseFloat(formData.get("amount") as string) * (formData.get("type") === "expense" ? -1 : 1),
-      account: formData.get("account") as string,
-    };
 
-    setTransactions([newTransaction, ...transactions]);
-    setIsAddDialogOpen(false);
-    toast.success("Lançamento adicionado com sucesso!");
-    e.currentTarget.reset();
+    try {
+      const amount = parseFloat(formData.get("amount") as string);
+      if (isNaN(amount) || amount <= 0) {
+        toast.error("O valor deve ser um número positivo.");
+        return;
+      }
+
+      const newTransaction: Transaction = {
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        date: formData.get("date") as string,
+        type: formData.get("type") as "income" | "expense",
+        category: formData.get("category") as string,
+        subcategory: formData.get("subcategory") as string,
+        description: formData.get("description") as string,
+        amount: amount * (formData.get("type") === "expense" ? -1 : 1),
+        account: formData.get("account") as string,
+      };
+
+      setTransactions([newTransaction, ...transactions]);
+      setIsAddDialogOpen(false);
+      toast.success("Lançamento adicionado com sucesso!");
+      e.currentTarget.reset();
+    } catch (error) {
+      toast.error("Erro ao adicionar lançamento");
+    }
   };
 
   const filteredTransactions = transactions.filter(transaction => {
     const matchesSearch = transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
+      transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === "all" || transaction.type === filterType;
     return matchesSearch && matchesFilter;
   });
@@ -138,7 +148,7 @@ const lancamentosView = () => {
             Gerencie todas as suas receitas e despesas
           </p>
         </div>
-        
+
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -323,11 +333,10 @@ const lancamentosView = () => {
             {filteredTransactions.map((transaction) => (
               <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                 <div className="flex items-center gap-4">
-                  <div className={`p-2 rounded-full ${
-                    transaction.type === 'income' ? 'bg-green-500/20' : 'bg-red-500/20'
-                  }`}>
-                    {transaction.type === 'income' ? 
-                      <TrendingUp className="h-4 w-4 text-green-500" /> : 
+                  <div className={`p-2 rounded-full ${transaction.type === 'income' ? 'bg-green-500/20' : 'bg-red-500/20'
+                    }`}>
+                    {transaction.type === 'income' ?
+                      <TrendingUp className="h-4 w-4 text-green-500" /> :
                       <TrendingDown className="h-4 w-4 text-red-500" />
                     }
                   </div>
@@ -339,9 +348,8 @@ const lancamentosView = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className={`font-bold ${
-                    transaction.type === 'income' ? 'text-green-500' : 'text-red-500'
-                  }`}>
+                  <div className={`font-bold ${transaction.type === 'income' ? 'text-green-500' : 'text-red-500'
+                    }`}>
                     {transaction.type === 'income' ? '+' : ''}R$ {Math.abs(transaction.amount).toLocaleString('pt-BR')}
                   </div>
                   <div className="text-sm text-muted-foreground">
