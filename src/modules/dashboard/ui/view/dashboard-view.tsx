@@ -39,7 +39,7 @@ const DashboardView = () => {
   ];
 
   return(
-    <div className="space-y-6">
+    <div className="space-y-6 p-8">
         {/* Header */}
         <div className="space-y-2">
             <h2 className="text-3xL font-bold tracking-tight text-foreground">Dashboard Financeiro</h2>
