@@ -13,22 +13,23 @@ import { useState } from "react";
 
 const SignInView = () => {
 
-   const { setUser, setToken } = useAuthStore();
-    const router = useRouter();
-    const [loading, setLoading] = useState<boolean>(false);
+  const { setUser, setToken } = useAuthStore();
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: {errors},
+    formState: { errors },
   } = useForm<SignInFormData>();
 
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     console.log("Dados enviados:", data);
+    setLoading(true);
     const result = await AuthService.login(data);
 
-     if (result.success && result.user && result.token) {
+    if (result.success && result.user && result.token) {
       // Registro bem-sucedido
       setUser(result.user);
       setToken(result.token);
@@ -38,9 +39,8 @@ const SignInView = () => {
       reset();
 
       // Redirecionar para dashboard
-      router.push('/dashboard');
+      router.push("/dashboard");
 
-      return { success: true };
     } else {
       // Erro no registro
       setLoading(false);
@@ -49,7 +49,7 @@ const SignInView = () => {
       }
     }
   };
- 
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -60,7 +60,6 @@ const SignInView = () => {
               Preencha os dados abaixo para se logar
             </p>
 
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">E-mail</Label>
@@ -69,7 +68,9 @@ const SignInView = () => {
                   type="email"
                   placeholder="Digite seu e-mail"
                   className="border-cinze-500"
-                  {...register("email", {required: "O e-mail é obrigatório"})}
+                  {...register("email", {
+                    required: "O e-mail é obrigatório",
+                  })}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -83,28 +84,35 @@ const SignInView = () => {
                   type="password"
                   placeholder="Digite sua senha"
                   className="border-cinze-500"
-                  {...register("password", {required: "A senha é obrigatória" })}
+                  {...register("password", {
+                    required: "A senha é obrigatória",
+                  })}
                 />
                 {errors.password && (
                   <p className="text-red-500 text-sm">{errors.password.message}</p>
                 )}
               </div>
 
-              <Button type="submit" className="w-full">
-                Logar
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Carregando..." : "Logar"}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                esqueceu a senha?{" "}
+                Esqueceu a senha?{" "}
+                <a href="/auth/forgot-password"
+                  className="underline underline-offset-4 text-primary hover:text-primary-dark"> Recuperar senha
+                </a>
               </p>
             </div>
           </div>
 
           <div className="bg-gray-50 p-6 flex items-center justify-center">
             <div className="text center">
-              <h3 className="text-x1 font-semibold mb-2">Bem-vindo ao Organiza Money</h3>
+              <h3 className="text-x1 font-semibold mb-2">
+                Bem-vindo ao Organiza Money
+              </h3>
               <p className="text-gray-600">
                 Organize suas finanças de forma simples e eficiente
               </p>
