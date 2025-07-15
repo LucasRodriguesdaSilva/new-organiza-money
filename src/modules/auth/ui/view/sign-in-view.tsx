@@ -6,17 +6,48 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { SignInFormData } from "@/types/auth/auth";
+import { AuthService } from "@/services/auth/auth.service";
+import { useAuthStore } from "@/store/auth-store";
+import { useRouter } from "nextjs-toploader/app";
+import { useState } from "react";
 
 const SignInView = () => {
+
+   const { setUser, setToken } = useAuthStore();
+    const router = useRouter();
+    const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: {errors},
   } = useForm<SignInFormData>();
 
-  const onSubmit: SubmitHandler<SignInFormData> = (data) => {
+  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     console.log("Dados enviados:", data);
+    const result = await AuthService.login(data);
+
+     if (result.success && result.user && result.token) {
+      // Registro bem-sucedido
+      setUser(result.user);
+      setToken(result.token);
+      setLoading(false);
+
+      // Limpar formulário
+      reset();
+
+      // Redirecionar para dashboard
+      router.push('/dashboard');
+
+      return { success: true };
+    } else {
+      // Erro no registro
+      setLoading(false);
+      if (result.message) {
+        console.error("Erro ao fazer login:", result.message);
+      }
+    }
   };
  
   return (
