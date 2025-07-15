@@ -22,7 +22,7 @@ interface Transaction {
   account: string;
 }
 
-const lancamentosView = () => {
+const LancamentosView = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -329,9 +329,14 @@ const lancamentosView = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-4" role="list" aria-label="Lista de transações">
             {filteredTransactions.map((transaction) => (
-              <div key={transaction.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+              <div 
+               key={transaction.id}
+               className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+               role="listitem"
+               aria-label={`Transação: ${transaction.description}, ${transaction.type === 'income' ? 'Receita' : 'Despesa'} de R$ ${Math.abs(transaction.amount).toLocaleString('pt-BR')}`}
+               >
                 <div className="flex items-center gap-4">
                   <div className={`p-2 rounded-full ${transaction.type === 'income' ? 'bg-green-500/20' : 'bg-red-500/20'
                     }`}>
@@ -353,7 +358,12 @@ const lancamentosView = () => {
                     {transaction.type === 'income' ? '+' : ''}R$ {Math.abs(transaction.amount).toLocaleString('pt-BR')}
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {new Date(transaction.date).toLocaleDateString('pt-BR')}
+                    {new Date(transaction.date).toLocaleDateString('pt-BR', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      timeZone: 'America/Sao_Paulo'
+                    })}
                   </div>
                 </div>
               </div>
@@ -365,4 +375,4 @@ const lancamentosView = () => {
   );
 };
 
-export default lancamentosView;
+export default LancamentosView;
