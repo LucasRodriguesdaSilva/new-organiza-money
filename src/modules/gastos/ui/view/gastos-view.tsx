@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@radix-ui/react-progress";
+import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, CreditCard, PieChart, Plus, TrendingDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -30,7 +30,7 @@ const topExpenses = [
 
 
 
-const gastosview = () => {
+const Gastosview = () => {
     const totalBudgeted = expenseCategories.reduce((sum, cat) => sum + cat.budgeted, 0);
     const totalSpent = expenseCategories.reduce((sum, cat) => sum + cat.spent, 0);
     const overBudgetCategories = expenseCategories.filter(cat => cat.status === "over").length;
@@ -208,4 +208,4 @@ const gastosview = () => {
 
 };
 
-export default gastosview;
+export default Gastosview;
