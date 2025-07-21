@@ -1,7 +1,7 @@
 import InvestimentosView from "@/modules/investimentos/ui/view/investimentos";
 
 
-const page = async () => {
+const page = () => {
     return <InvestimentosView />
 }
 

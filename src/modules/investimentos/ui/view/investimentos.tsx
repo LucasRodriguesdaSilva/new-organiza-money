@@ -2,7 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangle, DollarSign, PieChart, Plus, Target, TrendingUp } from "lucide-react";
 
-const Investimentos = [
+interface Investimento {
+    product: string;
+    amount: number;
+    percentage: number;
+    yield: number;
+    maturity: string;
+    risk: 'Baixo' | 'Médio' | 'Alto';
+};
+
+const Investimentos: Investimento[] = [
   { product: "CDB Banco X", amount: 15000, percentage: 35, yield: 12.5, maturity: "2026", risk: "Baixo" },
   { product: "Tesouro IPCA+", amount: 12000, percentage: 28, yield: 11.8, maturity: "2030", risk: "Baixo" },
   { product: "LCA Banco Y", amount: 8000, percentage: 19, yield: 10.2, maturity: "2025", risk: "Baixo" },
@@ -10,14 +19,27 @@ const Investimentos = [
   { product: "Ações (ITUB4)", amount: 2500, percentage: 6, yield: 15.8, maturity: "-", risk: "Alto" },
 ];
 
-const monthlyReturns = [
+interface RetornoMensal {
+    month: string;
+    amount: number;
+    projected?: boolean;
+};
+
+const monthlyReturns: RetornoMensal[] = [
     { month: "jun/25", amount: 425 },
     { month: "jul/25", amount: 438 },
-    { month: "Ago/25", amount: 445 },
-    { month: "Set/25", amount: 452, projected: true },
-]
+    { month: "ago/25", amount: 445 },
+    { month: "set/25", amount: 452, projected: true },
+];
 
-const diversification = {
+interface Diversificação {
+    fixedIncome: number;
+    variableIncome: number; 
+    idealFixed: number;
+    idealVariable: number;
+};
+
+const diversification: Diversificação = {
     fixedIncome: 94,
     variableIncome: 6,
     idealFixed: 75,
@@ -28,6 +50,8 @@ const InvestimentosView = () => {
     const totalInvested = Investimentos.reduce((sum, inv) => sum + inv.amount, 0);
     const averageYield = Investimentos.reduce((sum, inv) => sum + (inv.yield * inv.percentage / 100), 0);
     const yearlyProjection = (totalInvested * averageYield) / 100;
+    const monthlyIncome = monthlyReturns.filter(month => !month.projected)
+        .reduce((sum, month) => sum + month.amount, 0) / monthlyReturns.filter(month => !month.projected).length;
 
     return (
         <div className="space-y-6 p-8">
@@ -45,7 +69,7 @@ const InvestimentosView = () => {
             {/* Resumo dos Investimentos */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <Card>
-                    <CardHeader className="flex flex=row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Investido</CardTitle>
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
@@ -83,7 +107,7 @@ const InvestimentosView = () => {
                         <PieChart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">R$ 440</div>
+                        <div className="text-2xl font-bold">R$ {Math.round(monthlyIncome)}</div>
                         <p className="text-xs text-muted-foreground">média últimos 3 meses</p>
                     </CardContent>
                 </Card>
@@ -96,29 +120,29 @@ const InvestimentosView = () => {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                        {Investimentos.map((Investimentos, index) => (
+                        {Investimentos.map((investimentos, index) => (
                             <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                                 <div className="flex items-center space-x-4">
                                     <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                                         <TrendingUp className="w-6 h-6 text-blue-600" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold">{Investimentos.product}</h3>
+                                        <h3 className="font-semibold">{investimentos.product}</h3>
                                         <p className="text-sm text-muted-foreground">
-                                            Vencimento: {Investimentos.maturity} • Risco: {Investimentos.risk}</p>
+                                            Vencimento: {investimentos.maturity} • Risco: {investimentos.risk}</p>
                                     </div>
                                 </div>
                                 <div className="text-right space-x-4 flex items-center">
                                     <div className="text-center">
                                         <p className="text-sm text-muted-foreground">Rentabilidade</p>
-                                        <p className="font-semibold text-green-600">{Investimentos.yield}% a.a.</p>
+                                        <p className="font-semibold text-green-600">{investimentos.yield}% a.a.</p>
                                     </div>
                                     <div className="text-center">
                                         <p className="text-sm text-muted-foreground">% Carteira</p>
-                                        <p className="font-semibold">{Investimentos.percentage}%</p>
+                                        <p className="font-semibold">{investimentos.percentage}%</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-semibold">R$ {Investimentos.amount.toLocaleString()}</p>
+                                        <p className="font-semibold">R$ {investimentos.amount.toLocaleString()}</p>
                                     </div>
                                 </div>
                             </div>
