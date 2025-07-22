@@ -1,7 +1,7 @@
 import MetasView from "@/modules/metas/ui/view/metas-view";
 
-const page = () => {
-    return <MetasView />
+const MetasPage = () => {
+    return <MetasView />;
 }
 
-export default page;
+export default MetasPage;

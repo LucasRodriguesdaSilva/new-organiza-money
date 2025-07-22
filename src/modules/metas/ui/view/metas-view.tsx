@@ -3,10 +3,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { DialogHeader } from "@/components/ui/dialog";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
-import { Label } from "@radix-ui/react-label";
-import { Progress } from "@radix-ui/react-progress";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, DollarSign, Plus, Target, TrendingUp } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -81,7 +80,7 @@ const MetasView = () => {
 
         const deadlineDate =new Date(deadline);
         const now = new Date();
-        const monthsRemaining = Math.max(1, Math.ceil((deadlineDate.getTime() - now.getTime()) / (100 * 60 * 60 * 24 * 30)));
+        const monthsRemaining = Math.max(1, Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30)));
         const monthlyRequired = (targetAmount - currentAmount) / monthsRemaining;
 
         const newGoal: Goal = {
@@ -141,7 +140,7 @@ const MetasView = () => {
     const calculateMonthsRemaining = (deadline: string) => {
         const deadlineDate = new Date(deadline);
         const now = new Date();
-        return Math.max(0, Math.ceil((deadlineDate.getTime() - now.getTime()) / (100 * 60 * 60 * 24 * 30)));
+        return Math.max(0, Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24 * 30)));
     };
 
     return (
@@ -172,6 +171,7 @@ const MetasView = () => {
                                 <input
                                     id="name"
                                     name="name"
+                                    className="w-full px-3 py-2 border rounded-md"
                                     placeholder="Ex: Viagem para Paris"
                                     required
                                 />
@@ -183,10 +183,23 @@ const MetasView = () => {
                                     <input
                                         id="targetAmount"
                                         name="targetAmount"
+                                        className="w-full px-3 py-2 border rounded-md"
                                         type="number"
                                         step="0.01"
                                         placeholder="10000.00"
                                         required
+                                    />
+                                </div>
+                                
+                                <div className="space-y-2">
+                                    <Label htmlFor="currentAmount">Valor Atual</Label>
+                                    <input
+                                        id="currentAmount"
+                                        name="currentAmount"
+                                        className="w-full px-3 py-2 border rounded-md"
+                                        type="number"
+                                        step="0.01"
+                                        placeholder="0.00"
                                     />
                                 </div>
                             </div>
@@ -196,6 +209,7 @@ const MetasView = () => {
                                 <input
                                     id="deadline"
                                     name="deadline"
+                                    className="w-full px-3 py-2 border rounded-md"
                                     type="date"
                                     required
                                 />
@@ -234,7 +248,7 @@ const MetasView = () => {
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm font-medium text-muted-foreground">Metas Ativas</p>
-                                <p className="text-2xl font-bold">{globalThis.length}</p>
+                                <p className="text-2xl font-bold">{goals.length}</p>
                             </div>
                             <Target className="h-8 w-8 text-green-500" />
                         </div>
@@ -289,7 +303,7 @@ const MetasView = () => {
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-sm">
-                                        <span>Progesso</span>
+                                        <span>Progresso</span>
                                         <span>{progress.toFixed(1)}%</span>
                                     </div>
                                     <Progress value={progress} className="h-3" />
@@ -315,7 +329,7 @@ const MetasView = () => {
                                 </div>
 
                                 {goal.status === "behind" && (
-                                    <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                                    <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                                         <div className="flex items-center gap-2 mb-1">
                                             <AlertTriangle className="h-4 w-4 text-yellow-500" />
                                             <span className="text-sm font-medium text-yellow-500">Ação Necessária</span>
