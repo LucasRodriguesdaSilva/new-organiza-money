@@ -40,6 +40,7 @@ const navItems: NavItemsProps[] = [
   { title: "Lançamentos", url: "/lancamentos", icon: PlusCircle },
   { title: "Gastos", url: "/gastos", icon: CreditCard },
   { title: "Investimentos", url: "/investimentos", icon: TrendingUp },
+  { title: "Metas", url: "/metas", icon: Target },
 
 
 ];
