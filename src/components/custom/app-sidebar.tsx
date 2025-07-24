@@ -47,7 +47,7 @@ const navItems: NavItemsProps[] = [
 ];
 
 const configItems = [
-  { title: "Configurações", url: "/settings", icon: Settings },
+  { title: "Configurações", url: "/configuracoes", icon: Settings },
 ];
 
 export function AppSidebar() {
